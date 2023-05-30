@@ -1,11 +1,14 @@
-### Just some personal files
-NOTES.txt
+### PERSONAL STUFF!!!
+.vscode
+plans
+
+### Metadata + exec stuff (not needed for source, only for releases)
+main.rc
 main.res
-program.rc
-program.ico
+main.ico
+main.exe
 
-
-### Installation-specific files
+### Installation-specific files (created at runtime, dont need them in source)
 logs
 saves
 saved_images

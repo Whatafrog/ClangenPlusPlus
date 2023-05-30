@@ -19,7 +19,7 @@
             "label": "C/C++: Apply .ico to .exe",
             "command": "windres",
             "args": [
-                "program.rc", "-O", "coff", "-o", "main.res"
+                "main.rc", "-O", "coff", "-o", "main.res"
             ]
         },
         {
