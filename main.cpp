@@ -1,4 +1,3 @@
-#include "scripts/platform.cpp"
 #include "scripts/game.cpp"
 
 
@@ -22,6 +21,7 @@ int main(int argc, char *argv[]) {
     }
 
     game->clean();
+    delete game;
 
     return 0;
 }

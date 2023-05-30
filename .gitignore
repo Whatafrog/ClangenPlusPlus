@@ -9,6 +9,7 @@ main.ico
 main.exe
 
 ### Installation-specific files (created at runtime, dont need them in source)
+.temp
 logs
 saves
 saved_images

@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <SDL2/SDL.h>
+#include <iostream>
 #include <map>
 
 class Game {
@@ -36,5 +37,13 @@ class Game {
 };
 
 Game* game = nullptr;
+
+enum system_type : short { win32, win64, macOS, linux, unix };
+
+namespace systemInfo {
+    short platform;
+    short getSystem();
+    std::string getName(const int type);
+}
 
 #endif
