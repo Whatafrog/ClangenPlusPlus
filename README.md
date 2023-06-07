@@ -7,7 +7,7 @@
 
 ### What is the mod all about?
 
-**Clangen++** is a rewrite of Clangen in **C++**, in-order to take advantage of **C++** in game-dev over **Python**! This "mod" currently has no intentions to add any more content than is already existing, but there are plans in the future! The **main goal** we are working towards is getting up to date to **Commit** [90af015cfcee6d5706bc4a01bd8b04a76f72ab34](https://github.com/Thlumyn/clangen/commit/90af015cfcee6d5706bc4a01bd8b04a76f72ab34), and we will let you know when that goal is reached!
+**Clangen++** is a rewrite of [Clangen](https://github.com/Thlumyn/clangen) in **C++**, in-order to take advantage of **C++** in game-dev over **Python**! This "mod" currently has no intentions to add any more content than is already existing, but there are plans in the future! The **main goal** we are working towards is getting up to date to **Commit** [90af015cfcee6d5706bc4a01bd8b04a76f72ab34](https://github.com/Thlumyn/clangen/commit/90af015cfcee6d5706bc4a01bd8b04a76f72ab34), and we will let you know when that goal is reached!
 
 ### Will it work on my platform?
 During development, the primary environment is **Windows 10**, but I do have other systems in mind! I am planning to support **Linux-Based Systems** aswell as **Solaris** and **MacOs**, but they will not be worked on until the initial release of this mod!
