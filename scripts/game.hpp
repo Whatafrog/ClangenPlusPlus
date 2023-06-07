@@ -10,8 +10,9 @@
 
 const struct versionInfo {
     const unsigned short major = 0; 
-    const unsigned short minor = 1;
+    const unsigned short minor = 0;
     const unsigned short revision = 0;
+    const char* label = "Whole lotta effort!";
 } version_info;
 
 
