@@ -1,4 +1,4 @@
-![clangenplusplus](https://github.com/dnbow/ClangenPlusPlus/assets/111910170/3d0a2574-3b4b-4fc6-9bc1-0c29ff34dfd1)
+![clangenplusplus](https://github.com/dnbow/ClangenPlusPlus/assets/111910170/5663bded-235d-494e-a034-9172e6c782cf)
 
 # Clangen++ is currently in development, and supports no game-version! Please be patient, a mod like this just to get up-to-date takes ALOT of time!
 
