@@ -1,5 +1,6 @@
-# Clangen++ is currently in development, and supports no game-version! 
-### Please patient! A mod like this just to get up-to-date takes time. Conversion of code from Python to C++ is a mental challenge sometimes, and it is also my first project of this size- so i'm going to get somethings wrong initially! I'm open to any criticisms and suggestions whether that be bad code or just general wanted features in Clangen++
+![clangenplusplus](https://github.com/dnbow/ClangenPlusPlus/assets/111910170/5663bded-235d-494e-a034-9172e6c782cf)
+
+# Clangen++ is currently in development, and supports no game-version! Please be patient, a mod like this just to get up-to-date takes ALOT of time!
 
 *******************************************************************************
 
