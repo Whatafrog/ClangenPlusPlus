@@ -19,6 +19,11 @@ There is *partial* mod support but only for mods that altar existing assets. Thi
 - Any sound overwrites (when that feature becomes available)
 - Any patrol, event or condition overwrites (they can be additions/deletions aslong as they edit an existing file!)
 
+What will **NOT** work are:
+
+- Any code rewrites
+- Any theme tweakings
+
 **I am more than happy (with permission from the owners of course) to make mods compatible with this one!**
 
 -------------------------------------------------------------------------------
