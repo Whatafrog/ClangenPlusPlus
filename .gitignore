@@ -1,15 +1,16 @@
 ### PERSONAL STUFF!!!
-.vscode/**
-plans
-
-### Metadata + exec stuff (not needed for source, only for releases)
-main.rc
-main.res
-main.ico
-main.exe
+..plans
+.vscode
 
 ### Installation-specific files (created at runtime, dont need them in source)
+.git
 .temp
-logs
-saves
-saved_images
+.logs
+.saves
+.screenshots
+
+### Metadata an application stuff (not needed for source, only for releases)
+clangen.rc
+clangen.res
+clangen.ico
+clangen.exe

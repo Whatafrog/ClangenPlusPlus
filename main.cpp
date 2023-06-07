@@ -1,27 +1,31 @@
-#include "scripts/game.cpp"
-
-
+#include <scripts/game.cpp>
 
 int main(int argc, char *argv[]) {
-    float ticks, ticks_prev, tick_delta;
+    //SystemInit(system_info);
+    std::filesystem::current_path(SDL_GetBasePath());
 
-    game = new Game();
-    game->init(800, 700);
-
-    ticks_prev = SDL_GetTicks64();
-    while (game->running()) {
-        ticks = SDL_GetTicks64();
-        tick_delta = ticks - ticks_prev;
-        ticks_prev = ticks;
-        game->deltaTime = tick_delta;
-
-        game->handleEvents();
-        game->update();
-        game->render();
+    if (game.init(800, 700) || game.load()) {
+        return -1;
     }
 
-    game->clean();
-    delete game;
+    float deltaTime;
+    int frameTime;
+    Uint64 newTicks, currentTicks = SDL_GetTicks64();
+
+    game.switchScreen(start_screen);
+    game.setTheme(default_theme);
+    
+    while (game.running()) {
+
+        newTicks = SDL_GetTicks64();
+        frameTime = newTicks - currentTicks;
+        currentTicks = newTicks;
+
+        game.update();
+        game.render();
+
+        SDL_Delay(10); //temporary fix to overuse of gpu and cpu (equivilent of 100 fps)
+    }
 
     return 0;
 }
