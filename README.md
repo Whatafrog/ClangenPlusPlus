@@ -49,5 +49,6 @@ I want to make it so instead of just a wall of scrollable text and names, there 
 # Changes from Base Game
 
 - All the .json files revolving around themes in resources are now merged into one .ini file
+- You can take a screenshot of the whole game screen with F12
 
 _______________________________________________________________________________
