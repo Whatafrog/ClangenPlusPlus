@@ -19,6 +19,11 @@ There is *partial* mod support but only for mods that altar existing assets. Thi
 - Any sound overwrites (when that feature becomes available)
 - Any patrol, event or condition overwrites (they can be additions/deletions aslong as they edit an existing file!)
 
+What will **NOT** work are:
+
+- Any code rewrites
+- Any theme tweakings
+
 **I am more than happy (with permission from the owners of course) to make mods compatible with this one!**
 
 -------------------------------------------------------------------------------
@@ -44,5 +49,6 @@ I want to make it so instead of just a wall of scrollable text and names, there 
 # Changes from Base Game
 
 - All the .json files revolving around themes in resources are now merged into one .ini file
+- You can take a screenshot of the whole game screen with F12
 
 _______________________________________________________________________________
