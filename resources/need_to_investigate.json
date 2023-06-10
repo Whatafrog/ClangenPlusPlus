@@ -1,0 +1,17 @@
+{
+  "#relation_bar":
+  {
+    "misc":
+    {
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "6",
+      "border_width": "4",
+      "shadow_width": "0"
+    }
+  }
+}
+
+
+
+
+

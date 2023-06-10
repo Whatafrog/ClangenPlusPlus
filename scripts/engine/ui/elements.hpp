@@ -2,60 +2,54 @@
 
 #include <functional>
 #include <iostream>
+#include <variant>
+#include <vector>
+#include <map>
 
 #include <SDL2/SDL_image.h>
 
 
-
-class UiToolTip {
-    public:
-        std::string text;
+struct UiToolTip {
+    std::string text;
 
 };
 
 
 
-class UiElement {
-    public:
-        UiElement() {};
-        ~UiElement() {};
+struct UiElement {
+    UiElement(const int x, const int y, const int w, const int h, SDL_Texture *n_image, SDL_Texture *n_hover_image, SDL_Texture *n_unavailable_image, std::function<void (const int x, const int y)> callback);
+    ~UiElement() {
+        SDL_DestroyTexture(image);
+        SDL_DestroyTexture(hover_image);
+        SDL_DestroyTexture(unavailable_image);
+    }
 
-        bool enabled = true;
-        bool hovered = false;
-        bool visible = false;
+    bool enabled = true;
+    bool hovered = false;
+    bool visible = false;
 
-        short layer;
+    SDL_Texture* image;
+    SDL_Texture* hover_image;
+    SDL_Texture* unavailable_image;
 
-        SDL_Rect rect;
-        UiToolTip* tooltip;
+    SDL_Rect rect;
+    UiToolTip* tooltip;
 
+    std::function<void (const int x, const int y)> onClick;
 
-        std::function<void (const int x, const int y)> onClick;
-        std::function<void (const int x, const int y)> onClickOff;
-        std::function<void (const int x, const int y)> ClickHold;
+    void onHover(const int x, const int y);
+    void onHoverOff(const int x, const int y);
 
-        std::function<void (const int x, const int y)> onHover;
-        std::function<void (const int x, const int y)> onHoverOff;
-        std::function<void (const int x, const int y)> duringHover;
+    void build();
 
-};
-
-
-
-class UiImage : public UiElement {
-    public:
-        UiImage(const int x, const int y, const int w, const int h, SDL_Texture *n_image, SDL_Texture *n_hover_image, SDL_Texture *n_unavailable_image, std::function<void (const int x, const int y)> callback);
-        ~UiImage();
-
-        SDL_Texture* image;
-        SDL_Texture* hover_image;
-        SDL_Texture* unavailable_image;
-
-        bool enabled = true;
-        bool hovered = false;
-
-        void setDimenseon(const short new_width, const short new_height);
-
-        SDL_Texture* getImage();
-
+    SDL_Texture* getImage() {
+        if (enabled && !hovered && image)
+            return image;
+        else if (!enabled && unavailable_image)
+            return unavailable_image;
+        else if (hover_image)
+            return hover_image;
+        else
+            return image;
+    }
 };

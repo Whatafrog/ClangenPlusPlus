@@ -22,9 +22,10 @@ int main(int argc, char *argv[]) {
         currentTicks = newTicks;
 
         game.update();
-        game.render();
+        if (game.renderState)
+            game.render(game.renderState);
 
-        SDL_Delay(10); //temporary fix to overuse of gpu and cpu (equivilent of 100 fps)
+        SDL_Delay(16); //temporary fix to overuse of gpu and cpu (equivilent of 100 fps)
     }
 
     return 0;

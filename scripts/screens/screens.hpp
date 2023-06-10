@@ -1,30 +1,37 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <map>
 
 #include <SDL2/SDL_image.h>
 
-#include <scripts/game.hpp>
+#include <scripts/engine/ui/elements.hpp>
 
 
 
-class BaseScreen {
-    public:
-        BaseScreen() {};
-        ~BaseScreen() {};
+struct BaseScreen {
+    BaseScreen() {};
+    ~BaseScreen() {};
 
-        virtual void openScreen() = 0;
-        virtual void exitScreen() = 0;
-        virtual void rebuild() = 0;
-        virtual void update() = 0;
-        virtual void hover(const int x, const int y) = 0;
-        virtual void click(const int x, const int y) = 0;
+    SDL_Texture* base_texture;
+    SDL_Rect base_texture_rect;
+
+    UiElement* hoveredElement;
+    std::vector<UiElement*> elements;
+
+    virtual void openScreen() = 0;
+    virtual void exitScreen() = 0;
+    virtual void killScreen() = 0;
+    virtual void rebuild() = 0;
+    virtual void update() = 0;
+
+    void click(const int x, const int y) {}
 };
 
 
-class BaseSubscreen{
-    public:
-        BaseSubscreen() {};
-        ~BaseSubscreen() {};
+
+struct BaseSubscreen{
+    BaseSubscreen() {};
+    ~BaseSubscreen() {};
 };

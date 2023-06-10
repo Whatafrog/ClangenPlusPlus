@@ -5,12 +5,9 @@
 #include <vector>
 #include <cmath>
 
-#include <scripts/game.hpp>
-
 #include <scripts/engine/ui/elements.cpp>
 #include <scripts/screens/screens.cpp>
 #include <scripts/screens/menu_screens.cpp>
-
 
 Game::Game() {}
 Game::~Game() {}
@@ -20,12 +17,8 @@ short Game::init(short width, short height) {
     const Uint32 renderer_flags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
         window = SDL_CreateWindow("Clangen++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
         renderer = SDL_CreateRenderer(window, -1, renderer_flags);
-
 
         isRunning = true;
         std::cout << "Running on C++ 17 SDL 2.26.3\n";
@@ -100,9 +93,38 @@ void Game::update() {
                 break;
             case SDL_KEYUP:
                 switch (event.key.keysym.sym) {
+
+                    case SDLK_F10:
+                        if (darkModeEnabled)
+                            game.setThemeLight();
+                        else
+                            game.setThemeDark();
+                        renderState |= 1;
+                        break;
+
                     case SDLK_F11:
+
                         game.toggleFullscreen();
                         break;
+
+                    case SDLK_F12:
+                    {
+                        int w, h, i;
+                        SDL_GetRendererOutputSize(renderer, &w, &h);
+
+                        SDL_Renderer* renderer_copy = SDL_GetRenderer(window);
+                        SDL_Surface *screenshot = SDL_CreateRGBSurface(0, w, h, 32, rmask, gmask, bmask, amask);
+                        
+                        SDL_LockSurface(screenshot);
+                        SDL_RenderReadPixels(renderer_copy, NULL, screenshot->format->format, screenshot->pixels, screenshot->pitch);
+                        SDL_UnlockSurface(screenshot);
+
+                        while (std::filesystem::exists(".screenshots/screenshot_" + std::to_string(++i) + ".png")) {};
+                        SDL_SaveBMP(screenshot, (".screenshots/screenshot_" + std::to_string(i) + ".png").c_str());
+
+                        SDL_FreeSurface(screenshot);
+                        break;
+                    }
                     default:
                         break;
                 }
@@ -111,11 +133,31 @@ void Game::update() {
                 break;
             case SDL_MOUSEMOTION:
                 SDL_GetMouseState(&mouse_x, &mouse_y);
-                currentScreen->hover(mouse_x, mouse_y);
+                for (auto element : currentScreen->elements) {
+                    if (element->enabled) {
+                        SDL_Rect rect = element->rect;
+                        bool isHovered = rect.x < mouse_x && rect.y < mouse_y && mouse_x <= (rect.w + rect.x) && mouse_y <= (rect.h + rect.y);
+
+                        if (isHovered && !element->hovered) {
+                            element->hovered = true;
+                            element->onHover(mouse_x, mouse_y);
+                            currentScreen->hoveredElement = element;
+                            renderState |= 2;
+                        } else if (!isHovered && element->hovered) {
+                            element->hovered = false;
+                            element->onHoverOff(mouse_x, mouse_y);
+                            if (currentScreen->hoveredElement == element)
+                                currentScreen->hoveredElement = NULL;
+                            renderState |= 2;
+                        }
+                    }
+                }
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 if (event.button.button == SDL_BUTTON_LEFT)
                     currentScreen->click(mouse_x, mouse_y);
+                    if (currentScreen->hoveredElement)
+                        currentScreen->hoveredElement->onClick(mouse_x, mouse_y);
                 break;
             default:
                 break;
@@ -123,18 +165,18 @@ void Game::update() {
     }
 }
 
-void Game::render() {
-    switch (renderState) {
+void Game::render(int maxState) {
+    switch (renderState | maxState) {
         case 1:
-            SDL_SetRenderDrawColor(renderer, theme.bg_color.r, theme.bg_color.g, theme.bg_color.b, 255);
+            SDL_SetRenderDrawColor(renderer, theme.bg_color.getRed(), theme.bg_color.getGreen(), theme.bg_color.getBlue(), theme.bg_color.getAlpha());
             SDL_RenderClear(renderer);
             currentScreen->rebuild();
             SDL_RenderPresent(renderer);
-            game.renderState = 0;
+            renderState = 0;
             break;
         case 2:
             SDL_RenderPresent(renderer);
-            game.renderState = 0;
+            renderState = 0;
         default:
             break;
     }
@@ -154,6 +196,9 @@ void Game::quit() {
         lastScreen->exitScreen();
     currentScreen->exitScreen();
 
+    for (BaseScreen* screen : {start_screen, switch_clan_screen, new_clan_screen, settings_screen})
+        screen->killScreen();
+
     SDL_Quit();
 }
 
@@ -164,6 +209,8 @@ void Game::toggleFullscreen() {
         SDL_SetWindowFullscreen(game.window, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
     fullscreenState = !fullscreenState;
+    currentScreen->rebuild();
+    renderState |= 1;
 }
 
 unsigned int Game::hashImagePath(std::string string) {
@@ -199,15 +246,18 @@ SDL_Texture* Game::getTexture(std::string image_id, const bool persistent) {
     return texture;
 }
 
-void Game::switchScreen(BaseScreen* new_screen) {
+template<typename T>
+void Game::switchScreen(T new_screen) {
     SDL_RenderClear(renderer);
-    if (lastScreen)
-        lastScreen->exitScreen();
+    if (currentScreen) {
+        currentScreen->exitScreen();
+        currentScreen->hoveredElement = NULL; 
+    }
     lastScreen = currentScreen;
 
     currentScreen = new_screen;
     currentScreen->openScreen();
-    game.renderState = 1;
+    renderState |= 1;
 }
 
 void Game::setTheme(ThemeTemplate new_theme) {
@@ -216,12 +266,14 @@ void Game::setTheme(ThemeTemplate new_theme) {
         setThemeDark();
     else
         setThemeLight();
-    SDL_SetRenderDrawColor(renderer, theme.bg_color.r, theme.bg_color.g, theme.bg_color.b, 0);
+    renderState |= 1;
 }
+
 void Game::setThemeLight() {
     darkModeEnabled = false;
     theme.bg_color = theme_template.bg_color_light;
 }
+
 void Game::setThemeDark() {
     darkModeEnabled = true;
     theme.bg_color = theme_template.bg_color_dark;
